@@ -11,27 +11,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
-.react-calendar__tile--active {
-  background: #00aaff !important;
-  color: white;
-}
 
-.highlight {
-  background-color: #c0f0c0 ;
-}
-
-.react-calendar{
-  width: 100%;
-  max-width: 350px;
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+h1, form, ul {
   margin: 20px auto;
 }
-h1, form, ul{
-  margin: 20px auto;
-}
+
 .done-button {
   margin-left: 10px;
   color: red;
@@ -39,13 +23,14 @@ h1, form, ul{
   transition: 0.2s;
 }
 
+/* Calendar */
 .react-calendar {
   width: 100%;
   max-width: 350px;
   background: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   margin: 20px auto;
 }
 
@@ -55,10 +40,16 @@ h1, form, ul{
   font-weight: bold;
 }
 
-.highlight {
-  background-color: #c0f0c0 !important;
+.react-calendar__tile--now {
+  background: #d7c94e !important; /* Yellow for today */
 }
 
+/* Highlight dates with tasks */
+.highlight {
+  background-color: #9aea9a ; /* Green */
+}
+
+/* Task table */
 .task-table {
   width: 100%;
   border-collapse: collapse;
@@ -80,6 +71,7 @@ h1, form, ul{
   background-color: #f0f0f0;
 }
 
+/* Row coloring based on deadline */
 .past {
   background-color: #ffe5e5;
 }
@@ -92,6 +84,7 @@ h1, form, ul{
   background-color: #e5ffe5;
 }
 
-.cal-container, .task-table-main{
+/* Containers */
+.cal-container, .task-table-main {
   margin: 20px;
 }

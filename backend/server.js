@@ -32,6 +32,19 @@ app.put('/tasks/:id/complete', (req, res) => {
   });
 });
 
+// Update task
+app.put('/tasks/:id', (req, res) => {
+  const { title, deadline } = req.body;
+  db.run(
+    'UPDATE tasks SET title = ?, deadline = ? WHERE id = ?',
+    [title, deadline, req.params.id],
+    function (err) {
+      if (err) return res.status(500).send(err.message);
+      res.sendStatus(200);
+    }
+  );
+});
+
 
 
 app.listen(PORT, () => {

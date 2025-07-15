@@ -11,6 +11,11 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [title, setTitle] = useState('');
+  
+  // Edit states
+  const [editId, setEditId] = useState(null);
+  const [editTitle, setEditTitle] = useState('');
+  const [editDeadline, setEditDeadline] = useState('');
 
   const fetchTasks = () => {
     axios.get(API_URL).then(res => setTasks(res.data));
@@ -29,6 +34,31 @@ function App() {
     axios.put(`${API_URL}/${id}/complete`).then(fetchTasks);
   };
 
+  const startEditing = (task) => {
+    setEditId(task.id);
+    setEditTitle(task.title);
+    setEditDeadline(format(new Date(task.deadline), 'yyyy-MM-dd'));
+  };
+
+  const cancelEditing = () => {
+    setEditId(null);
+    setEditTitle('');
+    setEditDeadline('');
+  };
+
+  const handleUpdateTask = (e) => {
+    e.preventDefault();
+    axios
+      .put(`${API_URL}/${editId}`, {
+        title: editTitle,
+        deadline: editDeadline,
+      })
+      .then(() => {
+        fetchTasks();
+        cancelEditing();
+      });
+  };
+
   const filteredTasks = tasks.filter(task =>
     !task.completed && format(new Date(task.deadline), 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')
   );
@@ -37,7 +67,6 @@ function App() {
     .filter(task => !task.completed)
     .sort((a, b) => new Date(a.deadline) - new Date(b.deadline)
   );
-
 
   const getRowClass = (deadlineStr) => {
     const date = parseISO(deadlineStr);
@@ -54,6 +83,8 @@ function App() {
     <div style={{ padding: '20px' }}>
       <h1 style={{ textAlign: "center", paddingBottom: "20px", fontSize: "40px" }}>📅 To-Do Manager</h1>
       <div style={{ display: 'flex', gap: '30px', alignItems: 'flex-start' }} className="cal-container">
+        
+        {/* Calendar and day-wise tasks */}
         <div style={{ flex: 3 }}>
           <Calendar
             onChange={setSelectedDate}
@@ -61,7 +92,7 @@ function App() {
             tileClassName={({ date }) => {
               const dateStr = format(date, 'yyyy-MM-dd');
               const hasTask = tasks.some(task => format(new Date(task.deadline), 'yyyy-MM-dd') === dateStr);
-              return hasTask ? 'highlight' : null;
+              return hasTask ? 'highlight' : undefined;
             }}
           />
 
@@ -96,7 +127,10 @@ function App() {
             </button>
           </form>
         </div>
+
         <div style={{ flex: 0.5 }}></div>
+
+        {/* All tasks sorted by deadline */}
         <div style={{ flex: 3 }} className="task-table-main">
           <h3 style={{ marginBottom: "10px" }}>📋 All Tasks (by Deadline)</h3>
           <table className="task-table">
@@ -104,22 +138,46 @@ function App() {
               <tr>
                 <th>Task</th>
                 <th>Deadline</th>
-                <th>Done</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
               {sortedTasks.length === 0 && (
-                <tr><td colSpan="3"><p style={{ textAlign: "center", padding: "0", margin: "0", fontSize: "18px" }}>No tasks available.</p></td></tr>
+                <tr><td colSpan="3"><p style={{ textAlign: "center", fontSize: "18px", margin:"0px" }}>No tasks available.</p></td></tr>
               )}
               {sortedTasks.map(task => (
                 <tr key={task.id} className={getRowClass(task.deadline)}>
-                  <td>{task.title}</td>
-                  <td>{format(new Date(task.deadline), 'PPP')}</td>
-                  <td>
-                    <button className="done-button" onClick={() => markAsDone(task.id)}>
-                      Done
-                    </button>
-                  </td>
+                  {editId === task.id ? (
+                    <>
+                      <td>
+                        <input
+                          value={editTitle}
+                          onChange={e => setEditTitle(e.target.value)}
+                          style={{ width: '100%' }}
+                        />
+                      </td>
+                      <td>
+                        <input
+                          type="date"
+                          value={editDeadline}
+                          onChange={e => setEditDeadline(e.target.value)}
+                        />
+                      </td>
+                      <td>
+                        <button onClick={handleUpdateTask}>Save</button>
+                        <button onClick={cancelEditing} style={{ marginLeft: '6px' }}>Cancel</button>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>{task.title}</td>
+                      <td>{format(new Date(task.deadline), 'PPP')}</td>
+                      <td>
+                        <button className="done-button" onClick={() => markAsDone(task.id)}>Done</button>
+                        <button onClick={() => startEditing(task)} style={{ marginLeft: '6px' }}>Edit</button>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>
