@@ -1,18 +1,1 @@
-# Node modules (frontend + backend)
 **/node_modules/
-**/dist/
-**/build/
-
-# Environment
-.env
-
-# Logs
-*.log
-
-# DB files
-*.sqlite
-*.db
-
-# Mac / Windows system files
-.DS_Store
-Thumbs.db
