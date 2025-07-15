@@ -1,4 +1,3 @@
-// frontend/src/TaskList.js
 import React from 'react';
 
 function TaskList({ tasks, deleteTask, toggleTask }) {

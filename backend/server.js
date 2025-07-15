@@ -1,4 +1,3 @@
-// backend/server.js
 const express = require('express');
 const cors = require('cors');
 const db = require('./db');
@@ -22,16 +21,6 @@ app.post('/tasks', (req, res) => {
   db.run('INSERT INTO tasks (title, deadline) VALUES (?, ?)', [title, deadline], function (err) {
     if (err) return res.status(500).send(err.message);
     res.json({ id: this.lastID, title, completed: 0, deadline });
-  });
-});
-
-
-// Update task completion
-app.put('/tasks/:id', (req, res) => {
-  const { completed } = req.body;
-  db.run('UPDATE tasks SET completed = ? WHERE id = ?', [completed, req.params.id], function (err) {
-    if (err) return res.status(500).send(err.message);
-    res.sendStatus(200);
   });
 });
 

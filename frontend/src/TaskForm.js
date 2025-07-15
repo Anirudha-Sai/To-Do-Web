@@ -1,4 +1,3 @@
-// frontend/src/TaskForm.js
 import React, { useState } from 'react';
 
 function TaskForm({ addTask }) {
