@@ -84,7 +84,6 @@ function App() {
       <h1 style={{ textAlign: "center", paddingBottom: "20px", fontSize: "40px" }}>📅 To-Do Manager</h1>
       <div style={{ display: 'flex', gap: '30px', alignItems: 'flex-start' }} className="cal-container">
         
-        {/* Calendar and day-wise tasks */}
         <div style={{ flex: 3 }}>
           <Calendar
             onChange={setSelectedDate}
@@ -130,7 +129,6 @@ function App() {
 
         <div style={{ flex: 0.5 }}></div>
 
-        {/* All tasks sorted by deadline */}
         <div style={{ flex: 3 }} className="task-table-main">
           <h3 style={{ marginBottom: "10px" }}>📋 All Tasks (by Deadline)</h3>
           <table className="task-table">
